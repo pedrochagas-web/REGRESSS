@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>A MAIOR TRIP DE TODAS ⚡</title>
+  <title>RJ VIBES DA TROPA ⚡</title>
   
   <!-- Tailwind CSS & Google Fonts -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -57,7 +57,7 @@
       box-shadow: 0 0 15px rgba(0, 240, 255, 0.4), inset 0 0 8px rgba(0, 240, 255, 0.2);
     }
 
-    /* Proporção vertical estilo telemóvel */
+    /* Proporção vertical estilo telemóvel / mobile */
     .mobile-photo-frame {
       aspect-ratio: 4 / 5;
       width: 100%;
@@ -84,10 +84,10 @@
         <span>⚠️ NÍVEL DE LOUCURA: MÁXIMO</span>
       </div>
       <h1 class="text-3xl font-bungee glitch-text tracking-wide mt-3 text-white uppercase leading-tight">
-        PARTIU TRIP COM OS CRIA 🚀
+        RJ VIBES DA TROPA ⚡
       </h1>
       <p class="text-sm text-zinc-400 font-bold mt-1 tracking-wider uppercase">
-        O fígado chora, a história fica!
+        RLK DO ODIO
       </p>
     </header>
 
@@ -159,15 +159,10 @@
   <script>
     lucide.createIcons();
 
-    // ==========================================
-    // AJUSTE AS SUAS INFORMAÇÕES AQUI:
-    // ==========================================
+    // Configurações fixadas (Sem possibilidade de edição externa)
     const CONFIG = {
-      // Data da viagem no formato YYYY-MM-DDTHH:MM:SS
       targetDate: "2026-10-07T00:00:00",
-      
-      // Fotos do carrossel (adicione os links diretos das fotos)
-     photos: [
+      photos: [
         { url: "D.jpeg", caption: "OS SOBREVIVENTES DA MADRUGADA 🔥" },
         { url: "n.jpeg", caption: "SE NÃO FOR PRA DAR PT NEM VOU 🍻" },
         { url: "j.jpeg", caption: "PREPARA O ENGOV E VAI 🚀" },
@@ -204,7 +199,7 @@
         storyBars.appendChild(bar);
       });
 
-      photoCaption.innerText = CONFIG.photos[currentIndex]?.caption || "VIBE TOTAL 🔥";
+      photoCaption.innerText = CONFIG.photos[currentIndex]?.caption || "RLK DO ODIO 🔥";
     }
     renderCarousel();
 
@@ -218,7 +213,7 @@
     document.getElementById('prevBtn').addEventListener('click', () => goToIndex(currentIndex - 1));
     document.getElementById('nextBtn').addEventListener('click', () => goToIndex(currentIndex + 1));
 
-    // Suporte a toque no ecrã (swipe)
+    // Suporte a gestos touch (swipe)
     let touchStartX = 0;
     photoContainer.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
     photoContainer.addEventListener('touchend', e => {
@@ -227,7 +222,7 @@
       if (touchEndX - touchStartX > 40) goToIndex(currentIndex - 1);
     }, { passive: true });
 
-    // Atualização da contagem regressiva
+    // Contagem Regressiva
     function updateCountdown() {
       const now = new Date().getTime();
       const target = new Date(CONFIG.targetDate).getTime();
@@ -254,7 +249,7 @@
     setInterval(updateCountdown, 1000);
     updateCountdown();
 
-    // Efeito de confetes e som
+    // Efeitos sonoros e confetes
     let audioCtx = null;
     function playBeep() {
       if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
