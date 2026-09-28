@@ -1,627 +1,385 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Contagem Regressiva Especial</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>A MAIOR TRIP DE TODAS ⚡</title>
   
-  <!-- Tailwind CSS -->
+  <!-- Tailwind CSS & Google Fonts -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts: Cormorant Garamond & Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <!-- Lucide Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Space+Grotesk:wght@400;700;900&family=Bungee&display=swap" rel="stylesheet">
+  
+  <!-- Canvas Confetti & Lucide Icons -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- Canvas Confetti -->
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            serif: ['"Cormorant Garamond"', 'serif'],
-            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-          }
-        }
-      }
-    }
-  </script>
 
   <style>
-    /* Estilos Glassmorphism */
-    .glass-box {
-      background: rgba(18, 14, 24, 0.72);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background-color: #050508;
+      color: #fff;
+      overflow-x: hidden;
     }
-    .glass-sheet {
-      background: rgba(16, 12, 20, 0.95);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
+    
+    .font-marker {
+      font-family: 'Permanent Marker', cursive;
     }
-
-    /* Animação suave para troca de números */
-    .digit-pulse {
-      animation: numberPop 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
-    }
-    @keyframes numberPop {
-      0% { transform: scale(0.92); opacity: 0.6; }
-      100% { transform: scale(1); opacity: 1; }
+    
+    .font-bungee {
+      font-family: 'Bungee', cursive;
     }
 
-    /* Efeito de brilho de fundo */
-    .glow-bg {
-      background: radial-gradient(circle at 50% 10%, rgba(225, 29, 72, 0.22) 0%, rgba(136, 19, 55, 0.12) 40%, #09060b 80%);
+    /* Glitch Text Effect */
+    .glitch-text {
+      position: relative;
+      text-shadow: 2px 2px 0px #ff0055, -2px -2px 0px #00ffff;
+      animation: glitch 1.5s infinite alternate;
+    }
+    
+    @keyframes glitch {
+      0% { text-shadow: 2px 2px 0px #ff0055, -2px -2px 0px #00ffff; transform: skew(0deg); }
+      20% { text-shadow: -2px -2px 0px #ff0055, 2px 2px 0px #00ffff; transform: skew(-1deg); }
+      40% { text-shadow: 3px -1px 0px #ff0055, -3px 1px 0px #00ffff; transform: skew(1deg); }
+      60% { text-shadow: -1px 2px 0px #ff0055, 1px -2px 0px #00ffff; transform: skew(0deg); }
+      100% { text-shadow: 2px 2px 0px #ff0055, -2px -2px 0px #00ffff; transform: skew(-0.5deg); }
     }
 
-    /* Otimização de toque mobile */
-    .touch-pan-y {
-      touch-action: pan-y;
-      user-select: none;
-      -webkit-user-select: none;
+    /* Chaos Card Borders & Glow */
+    .neon-border {
+      border: 3px solid #ff0055;
+      box-shadow: 0 0 15px rgba(255, 0, 85, 0.6), inset 0 0 15px rgba(255, 0, 85, 0.3);
+    }
+    
+    .neon-box-blue {
+      border: 2px solid #00f0ff;
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.4), inset 0 0 8px rgba(0, 240, 255, 0.2);
+    }
+
+    /* Photo Ratio for Mobile */
+    .mobile-photo-frame {
+      aspect-ratio: 4 / 5;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      border-radius: 1.5rem;
+    }
+
+    /* Noise Background Overlay */
+    .noise-bg {
+      background-image: radial-gradient(rgba(255, 0, 85, 0.15) 1px, transparent 0), radial-gradient(rgba(0, 240, 255, 0.15) 1px, transparent 0);
+      background-size: 24px 24px;
+      background-position: 0 0, 12px 12px;
     }
   </style>
 </head>
+<body class="min-h-screen noise-bg flex justify-center selection:bg-pink-600 selection:text-white">
 
-<body class="glow-bg bg-[#09060b] text-neutral-100 min-h-[100dvh] flex flex-col justify-between selection:bg-rose-500 font-sans antialiased">
+  <!-- Mobile Container (Max width de celular para ficar perfeito no WhatsApp/Instagram) -->
+  <main class="w-full max-w-md min-h-screen flex flex-col justify-between p-4 pb-12 relative z-10">
 
-  <!-- Barra Superior Compacta Mobile -->
-  <header class="w-full max-w-md mx-auto px-4 pt-4 pb-2 flex items-center justify-between z-30">
-    <div class="flex items-center gap-2">
-      <span class="p-1.5 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30">
-        <i data-lucide="sparkles" class="w-4 h-4"></i>
-      </span>
-      <span class="font-serif text-lg font-bold tracking-wider uppercase text-neutral-100">Momentum</span>
-    </div>
-
-    <div class="flex items-center gap-2">
-      <!-- Botão de Confetes -->
-      <button onclick="triggerConfetti()" class="p-2.5 rounded-full bg-white/10 active:scale-95 transition border border-white/15 text-rose-300" title="Celebrar">
-        <i data-lucide="party-popper" class="w-4 h-4"></i>
-      </button>
-
-      <!-- Botão de Configurar -->
-      <button onclick="toggleSheet(true)" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-rose-600 active:scale-95 transition text-white text-xs font-semibold tracking-wide shadow-md shadow-rose-950">
-        <i data-lucide="sliders" class="w-3.5 h-3.5"></i>
-        <span>Editar</span>
-      </button>
-    </div>
-  </header>
-
-  <!-- Conteúdo Principal Adaptado ao Celular -->
-  <main class="w-full max-w-md mx-auto px-4 flex-1 flex flex-col justify-center items-center py-2 space-y-4">
-    
-    <!-- Títulos e Mensagem -->
-    <div class="text-center w-full px-2">
-      <div id="eventBadge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/15 border border-rose-500/30 text-[11px] font-semibold uppercase tracking-widest text-rose-300 mb-2">
-        <i data-lucide="heart" class="w-3 h-3 fill-rose-400 text-rose-400"></i>
-        <span id="badgeText">Contando os Segundos</span>
+    <!-- Top Badge / Header -->
+    <header class="text-center pt-2 pb-1">
+      <div class="inline-flex items-center gap-2 bg-yellow-400 text-black font-bungee text-xs px-3 py-1 rounded-full uppercase tracking-wider transform -rotate-2 shadow-lg shadow-yellow-500/30">
+        <span>⚠️ NÍVEL DE LOUCURA: MÁXIMO</span>
       </div>
-      <h1 id="eventTitle" class="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-white leading-tight drop-shadow-md">
-        Nosso Grande Momento
+      <h1 id="tripTitle" class="text-3xl font-bungee glitch-text tracking-wide mt-3 text-white uppercase leading-tight">
+        PARTIU TRIP COM OS CRIA 🚀
       </h1>
-      <p id="eventSubtitle" class="text-xs sm:text-sm text-neutral-300 mt-1 line-clamp-2 font-light">
-        Cada instante que passa nos aproxima do nosso dia inesquecível.
+      <p id="tripSubtitle" class="text-sm text-zinc-400 font-bold mt-1 tracking-wider uppercase">
+        O fígado chora, a história fica!
       </p>
-    </div>
+    </header>
 
-    <!-- Carrossel de Fotos com Proporção Vertical de Smartphone (4:5) -->
-    <div class="w-full relative px-1">
-      <div class="relative w-full aspect-[4/5] rounded-[28px] overflow-hidden shadow-2xl border border-white/20 bg-neutral-950 touch-pan-y" id="carouselWrapper">
+    <!-- CARROSSEL VERTICAL (ESTILO INSTAGRAM/REELS COM SWIPE) -->
+    <section class="my-3">
+      <div class="mobile-photo-frame neon-border bg-zinc-950 shadow-2xl relative select-none">
         
-        <!-- Barras de Progresso estilo Stories -->
-        <div id="storiesBarContainer" class="absolute top-3 inset-x-3.5 z-20 flex gap-1.5">
-          <!-- Inserido dinamicamente -->
+        <!-- Story Bars (Indicadores no Topo) -->
+        <div id="storyBars" class="absolute top-3 inset-x-3 z-30 flex gap-1.5 pointer-events-none"></div>
+
+        <!-- Tag Flutuante na Foto -->
+        <div class="absolute bottom-4 left-4 z-30 bg-black/80 backdrop-blur-md px-3 py-1.5 rounded-lg border border-pink-500/40">
+          <p id="photoCaption" class="text-xs font-bungee text-pink-400">🔥 FOTO DOS GUERREIROS</p>
         </div>
 
-        <!-- Slides do Carrossel -->
-        <div id="slidesTrack" class="w-full h-full relative">
-          <!-- Slides inseridos via JS -->
+        <!-- Fotos -->
+        <div id="photoContainer" class="w-full h-full relative cursor-grab active:cursor-grabbing">
+          <!-- As imagens são injetadas via JavaScript -->
         </div>
 
-        <!-- Botões de toque rápido (laterais transparentes com setas sutis) -->
-        <button onclick="prevSlide()" class="absolute left-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white flex items-center justify-center z-10 active:scale-90 transition" aria-label="Anterior">
+        <!-- Controles de Toque / Setas discretas -->
+        <button id="prevBtn" class="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-black/70 border border-white/20 flex items-center justify-center text-white active:scale-90 transition">
           <i data-lucide="chevron-left" class="w-5 h-5"></i>
         </button>
-        <button onclick="nextSlide()" class="absolute right-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white flex items-center justify-center z-10 active:scale-90 transition" aria-label="Próximo">
+        <button id="nextBtn" class="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-black/70 border border-white/20 flex items-center justify-center text-white active:scale-90 transition">
           <i data-lucide="chevron-right" class="w-5 h-5"></i>
         </button>
-
-        <!-- Legenda Inferior Flutuante -->
-        <div class="absolute bottom-3 inset-x-3 z-10">
-          <div class="bg-black/60 backdrop-blur-md border border-white/10 rounded-2xl px-3 py-2 text-center">
-            <p id="slideCaption" class="text-xs text-white/95 font-medium truncate">
-              Carregando memórias...
-            </p>
-          </div>
-        </div>
-
       </div>
-      <p class="text-[10px] text-center text-neutral-400 mt-1.5 flex items-center justify-center gap-1">
-        <i data-lucide="move-horizontal" class="w-3 h-3"></i> Deslize para o lado para ver mais fotos
-      </p>
-    </div>
+    </section>
 
-    <!-- Contagem Regressiva Mobile -->
-    <div class="w-full">
-      <div class="grid grid-cols-4 gap-2 text-center">
+    <!-- CONTAGEM REGRESSIVA NO ESTILO CAOS / DIGITAL -->
+    <section class="space-y-2">
+      <div class="text-center">
+        <span class="text-[11px] font-bungee text-cyan-400 tracking-widest uppercase">TEMPO RESTANTE ATÉ O DESASTRE</span>
+      </div>
+
+      <div class="grid grid-cols-4 gap-2">
         <!-- Dias -->
-        <div class="glass-box rounded-2xl py-3 px-1 shadow-lg">
-          <span id="daysNum" class="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-white block">00</span>
-          <span class="text-[10px] uppercase tracking-wider text-rose-300 font-semibold block mt-0.5">Dias</span>
+        <div class="neon-box-blue bg-zinc-900/90 rounded-2xl p-2.5 text-center flex flex-col justify-center items-center backdrop-blur-md">
+          <span id="days" class="text-3xl font-bungee text-white">00</span>
+          <span class="text-[10px] font-bold uppercase text-zinc-400 mt-0.5">DIAS</span>
         </div>
-
         <!-- Horas -->
-        <div class="glass-box rounded-2xl py-3 px-1 shadow-lg">
-          <span id="hoursNum" class="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-white block">00</span>
-          <span class="text-[10px] uppercase tracking-wider text-rose-300 font-semibold block mt-0.5">Horas</span>
+        <div class="neon-box-blue bg-zinc-900/90 rounded-2xl p-2.5 text-center flex flex-col justify-center items-center backdrop-blur-md">
+          <span id="hours" class="text-3xl font-bungee text-pink-400">00</span>
+          <span class="text-[10px] font-bold uppercase text-zinc-400 mt-0.5">HORAS</span>
         </div>
-
         <!-- Minutos -->
-        <div class="glass-box rounded-2xl py-3 px-1 shadow-lg">
-          <span id="minutesNum" class="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-white block">00</span>
-          <span class="text-[10px] uppercase tracking-wider text-rose-300 font-semibold block mt-0.5">Min</span>
+        <div class="neon-box-blue bg-zinc-900/90 rounded-2xl p-2.5 text-center flex flex-col justify-center items-center backdrop-blur-md">
+          <span id="minutes" class="text-3xl font-bungee text-yellow-400">00</span>
+          <span class="text-[10px] font-bold uppercase text-zinc-400 mt-0.5">MINS</span>
         </div>
-
         <!-- Segundos -->
-        <div class="glass-box rounded-2xl py-3 px-1 shadow-lg border-rose-500/30">
-          <span id="secondsNum" class="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-rose-400 block">00</span>
-          <span class="text-[10px] uppercase tracking-wider text-rose-300 font-semibold block mt-0.5">Seg</span>
+        <div class="neon-box-blue bg-zinc-900/90 rounded-2xl p-2.5 text-center flex flex-col justify-center items-center backdrop-blur-md border-pink-500 shadow-pink-500/30">
+          <span id="seconds" class="text-3xl font-bungee text-cyan-300 animate-pulse">00</span>
+          <span class="text-[10px] font-bold uppercase text-zinc-400 mt-0.5">SEGS</span>
         </div>
       </div>
+    </section>
 
-      <!-- Alerta de Evento Alcançado -->
-      <div id="reachedBanner" class="hidden mt-3 p-3 bg-gradient-to-r from-rose-600 to-pink-600 text-white rounded-2xl text-center text-sm font-semibold shadow-lg flex items-center justify-center gap-2">
-        <i data-lucide="bell-ring" class="w-4 h-4"></i>
-        <span>O momento esperado chegou! 🎉</span>
-      </div>
-    </div>
+    <!-- BARRA INFERIOR DE BOTÕES E INTERAÇÃO -->
+    <footer class="mt-4 flex items-center justify-between gap-3">
+      <!-- Botão de Hype / Buzina -->
+      <button id="hypeBtn" class="flex-1 py-3 px-4 rounded-xl font-bungee text-sm bg-gradient-to-r from-pink-600 to-yellow-500 text-white shadow-lg shadow-pink-500/30 active:scale-95 transition flex items-center justify-center gap-2">
+        <i data-lucide="party-popper" class="w-5 h-5"></i>
+        <span>SOLTAR O HYPE!</span>
+      </button>
+
+      <!-- Botão Som / Batida -->
+      <button id="soundBtn" class="w-12 h-12 rounded-xl bg-zinc-800 border border-white/20 flex items-center justify-center text-zinc-300 active:scale-90 transition">
+        <i data-lucide="volume-2" id="soundIcon" class="w-5 h-5"></i>
+      </button>
+
+      <!-- Botão Configurações -->
+      <button id="openConfigBtn" class="w-12 h-12 rounded-xl bg-zinc-800 border border-white/20 flex items-center justify-center text-zinc-300 active:scale-90 transition">
+        <i data-lucide="settings-2" class="w-5 h-5"></i>
+      </button>
+    </footer>
 
   </main>
 
-  <!-- Rodapé Compacto -->
-  <footer class="w-full text-center py-3 text-[11px] text-neutral-500">
-    <p>Feito para compartilhar momentos especiais</p>
-  </footer>
-
-  <!-- Bottom Sheet / Gaveta de Configurações Mobile -->
-  <div id="sheetOverlay" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex flex-col justify-end transition-opacity">
-    <div id="sheetContent" class="glass-sheet border-t border-white/20 w-full max-w-md mx-auto rounded-t-[32px] p-5 max-h-[85vh] overflow-y-auto transform translate-y-full transition-transform duration-300 ease-out text-neutral-100">
-      
-      <!-- Barra de arrastar superior -->
-      <div class="w-12 h-1 bg-neutral-600 rounded-full mx-auto mb-4"></div>
-
-      <div class="flex items-center justify-between pb-3 border-b border-white/10">
-        <div class="flex items-center gap-2">
-          <i data-lucide="settings-2" class="w-4 h-4 text-rose-400"></i>
-          <h2 class="text-base font-bold tracking-wide">Personalizar Contagem</h2>
-        </div>
-        <button onclick="toggleSheet(false)" class="p-1 rounded-lg text-neutral-400 hover:text-white">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
+  <!-- MODAL / DRAWER DE CONFIGURAÇÕES -->
+  <div id="configModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-end sm:items-center justify-center hidden">
+    <div class="bg-zinc-900 border-t sm:border border-pink-500/40 w-full max-w-md rounded-t-3xl sm:rounded-2xl p-6 text-white max-h-[85vh] overflow-y-auto">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-lg font-bungee text-pink-400">CONFIGURAR A TRIP</h2>
+        <button id="closeConfigBtn" class="text-zinc-400 hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
       </div>
 
-      <div class="mt-4 space-y-4 text-xs">
-        <!-- Título -->
+      <div class="space-y-4 text-xs font-bold uppercase">
         <div>
-          <label class="block font-medium text-neutral-300 mb-1">Título do Evento</label>
-          <input type="text" id="cfgTitle" class="w-full bg-neutral-900/90 border border-neutral-700 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-rose-500" placeholder="Ex: Casamento Luísa & Felipe">
+          <label class="block text-zinc-400 mb-1">Título do Evento</label>
+          <input type="text" id="inputTitle" class="w-full bg-zinc-800 border border-zinc-700 rounded-lg p-2.5 text-white font-sans text-sm focus:border-pink-500 outline-none">
         </div>
 
-        <!-- Selo / Categoria -->
         <div>
-          <label class="block font-medium text-neutral-300 mb-1">Selo / Tag Superior</label>
-          <input type="text" id="cfgBadge" class="w-full bg-neutral-900/90 border border-neutral-700 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-rose-500" placeholder="Ex: Nosso Grande Dia">
+          <label class="block text-zinc-400 mb-1">Subtítulo / Frase Marcante</label>
+          <input type="text" id="inputSubtitle" class="w-full bg-zinc-800 border border-zinc-700 rounded-lg p-2.5 text-white font-sans text-sm focus:border-pink-500 outline-none">
         </div>
 
-        <!-- Subtítulo -->
         <div>
-          <label class="block font-medium text-neutral-300 mb-1">Mensagem ou Subtítulo</label>
-          <textarea id="cfgSubtitle" rows="2" class="w-full bg-neutral-900/90 border border-neutral-700 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-rose-500" placeholder="Escreva uma frase marcante..."></textarea>
+          <label class="block text-zinc-400 mb-1">Data & Hora do Embarque / Festa</label>
+          <input type="datetime-local" id="inputDate" class="w-full bg-zinc-800 border border-zinc-700 rounded-lg p-2.5 text-white font-sans text-sm focus:border-pink-500 outline-none">
         </div>
 
-        <!-- Data do Evento -->
         <div>
-          <label class="block font-medium text-neutral-300 mb-1">Data e Hora do Evento</label>
-          <input type="datetime-local" id="cfgDate" class="w-full bg-neutral-900/90 border border-neutral-700 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-rose-500">
+          <label class="block text-zinc-400 mb-1">Adicionar Fotos da Galeria</label>
+          <input type="file" id="inputFile" accept="image/*" multiple class="w-full text-zinc-400 file:mr-3 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-xs file:font-bungee file:bg-pink-600 file:text-white cursor-pointer bg-zinc-800 p-1 rounded-lg">
         </div>
 
-        <!-- Seção de Fotos -->
-        <div class="pt-3 border-t border-white/10">
-          <div class="flex items-center justify-between mb-2">
-            <span class="font-semibold text-neutral-200 flex items-center gap-1.5">
-              <i data-lucide="images" class="w-4 h-4 text-rose-400"></i> Fotos do Carrossel
-            </span>
-
-            <!-- Botão de Upload da Galeria do Celular -->
-            <label class="cursor-pointer bg-rose-600 hover:bg-rose-500 active:scale-95 text-white px-3 py-1.5 rounded-xl font-medium flex items-center gap-1 transition">
-              <i data-lucide="upload" class="w-3 h-3"></i>
-              <span>Galeria</span>
-              <input type="file" id="imageFileInput" accept="image/*" multiple class="hidden" onchange="handleMobileUpload(event)">
-            </label>
-          </div>
-
-          <!-- Inserir por URL -->
-          <div class="flex gap-2 mb-3">
-            <input type="url" id="cfgPhotoUrl" placeholder="Ou cole o link da foto..." class="flex-1 bg-neutral-900/90 border border-neutral-700 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-rose-500">
-            <button onclick="addUrlPhoto()" class="px-3 py-2 bg-neutral-800 hover:bg-neutral-700 rounded-xl font-semibold border border-neutral-600">
-              Adicionar
-            </button>
-          </div>
-
-          <!-- Grid de Fotos Cadastradas -->
-          <div id="photosList" class="grid grid-cols-3 gap-2 max-h-40 overflow-y-auto p-1 bg-neutral-900/50 rounded-xl border border-neutral-800">
-            <!-- Miniaturas -->
-          </div>
-        </div>
-      </div>
-
-      <!-- Botões de Ação -->
-      <div class="mt-5 flex gap-2 pt-3 border-t border-white/10">
-        <button onclick="restoreDefaults()" class="w-1/3 py-2.5 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-neutral-300 font-semibold text-xs">
-          Padrões
-        </button>
-        <button onclick="saveSettings()" class="w-2/3 py-2.5 rounded-xl bg-rose-600 active:scale-98 text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-rose-950">
-          Salvar no Celular
+        <button id="saveConfigBtn" class="w-full py-3 rounded-xl bg-cyan-400 text-black font-bungee text-sm mt-4 hover:bg-cyan-300 transition shadow-lg shadow-cyan-500/30">
+          SALVAR MUDANÇAS
         </button>
       </div>
-
     </div>
   </div>
 
   <script>
-    // Fotos verticais adequadas para tela de smartphone (Unsplash em formato retrato)
-    const DEFAULT_DATA = {
-      title: "Nosso Grande Momento",
-      badge: "Celebrando o Amor",
-      subtitle: "Cada segundo nos aproxima da data mais esperada de nossas vidas.",
-      targetDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30).toISOString().slice(0, 16),
-      photos: [
-        {
-          url: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&h=1000&q=80",
-          caption: "O brilho nos olhos de quem encontrou seu lugar"
-        },
-        {
-          url: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&h=1000&q=80",
-          caption: "Sorrisos que eternizam cada instante juntos"
-        },
-        {
-          url: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&h=1000&q=80",
-          caption: "Construindo memórias inesquecíveis"
-        },
-        {
-          url: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&h=1000&q=80",
-          caption: "A contagem regressiva para viver o infinito"
-        }
-      ]
+    // Lucide Icons init
+    lucide.createIcons();
+
+    // Estado da Aplicação
+    const state = {
+      title: localStorage.getItem('trip_title') || "PARTIU TRIP COM OS CRIA 🚀",
+      subtitle: localStorage.getItem('trip_subtitle') || "O FÍGADO CHORA, A HISTÓRIA FICA!",
+      targetDate: localStorage.getItem('trip_date') || new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString().slice(0, 16),
+      photos: JSON.parse(localStorage.getItem('trip_photos')) || [
+        { url: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=1000&auto=format&fit=crop", caption: "SE NÃO FOR PRA DAR PT NEM VOU" },
+        { url: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1000&auto=format&fit=crop", caption: "OS SOBREVIVENTES DA MADRUGADA" },
+        { url: "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=1000&auto=format&fit=crop", caption: "PREPARA O ENGOV E VAI" }
+      ],
+      currentIndex: 0,
+      soundActive: false
     };
 
-    let state = {};
-    let currentIndex = 0;
-    let autoplayTimer = null;
-    let touchStartX = 0;
-    let touchEndX = 0;
-    let touchStartY = 0;
-    let touchEndY = 0;
+    // Elementos DOM
+    const photoContainer = document.getElementById('photoContainer');
+    const storyBars = document.getElementById('storyBars');
+    const photoCaption = document.getElementById('photoCaption');
+    const daysEl = document.getElementById('days');
+    const hoursEl = document.getElementById('hours');
+    const minutesEl = document.getElementById('minutes');
+    const secondsEl = document.getElementById('seconds');
+    const tripTitle = document.getElementById('tripTitle');
+    const tripSubtitle = document.getElementById('tripSubtitle');
 
-    // Carregar estado do localStorage
-    function initStorage() {
-      try {
-        const stored = localStorage.getItem('mobile_countdown_app_v2');
-        if (stored) {
-          state = JSON.parse(stored);
-        } else {
-          state = JSON.parse(JSON.stringify(DEFAULT_DATA));
-        }
-      } catch (err) {
-        state = JSON.parse(JSON.stringify(DEFAULT_DATA));
-      }
+    // Inicializar Títulos
+    function renderTitles() {
+      tripTitle.innerText = state.title;
+      tripSubtitle.innerText = state.subtitle;
     }
+    renderTitles();
 
-    function persistStorage() {
-      try {
-        localStorage.setItem('mobile_countdown_app_v2', JSON.stringify(state));
-      } catch (err) {
-        console.warn("Storage inacessível:", err);
-      }
-    }
-
-    // Atualizar UI Geral
-    function updateDOM() {
-      document.getElementById('eventTitle').textContent = state.title;
-      document.getElementById('badgeText').textContent = state.badge;
-      document.getElementById('eventSubtitle').textContent = state.subtitle;
-      renderCarousel();
-      renderPhotosManager();
-    }
-
-    // Renderizar Carrossel com Proporção de Celular
+    // Renderizar Fotos & Indicadores
     function renderCarousel() {
-      const track = document.getElementById('slidesTrack');
-      const storiesBar = document.getElementById('storiesBarContainer');
-      const caption = document.getElementById('slideCaption');
+      photoContainer.innerHTML = '';
+      storyBars.innerHTML = '';
 
-      track.innerHTML = '';
-      storiesBar.innerHTML = '';
+      state.photos.forEach((photo, index) => {
+        // Imagem
+        const img = document.createElement('img');
+        img.src = photo.url;
+        img.className = `absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${index === state.currentIndex ? 'opacity-100' : 'opacity-0 pointer-events-none'}`;
+        photoContainer.appendChild(img);
 
-      if (!state.photos || state.photos.length === 0) {
-        track.innerHTML = `
-          <div class="w-full h-full flex flex-col items-center justify-center p-6 text-neutral-400 text-center">
-            <i data-lucide="image-plus" class="w-10 h-10 mb-2 text-rose-400"></i>
-            <p class="text-xs">Nenhuma foto adicionada.<br>Toque em "Editar" para escolher fotos da sua galeria.</p>
-          </div>
-        `;
-        caption.textContent = "Sem fotos cadastradas";
-        lucide.createIcons();
-        return;
-      }
-
-      if (currentIndex >= state.photos.length) {
-        currentIndex = 0;
-      }
-
-      // Criar slides
-      state.photos.forEach((item, idx) => {
-        const slide = document.createElement('div');
-        const isActive = idx === currentIndex;
-        
-        slide.className = `absolute inset-0 w-full h-full transition-all duration-500 ease-out ${
-          isActive ? 'opacity-100 scale-100 z-10' : 'opacity-0 scale-95 pointer-events-none z-0'
-        }`;
-
-        // Imagem otimizada: object-cover com fallbacks e degradê elegante
-        slide.innerHTML = `
-          <img src="${item.url}" alt="${item.caption || 'Foto'}" 
-               class="w-full h-full object-cover object-center" 
-               onerror="this.src='https://placehold.co/800x1000/18181b/ffffff?text=Foto+Indisponível'" />
-          <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-black/50 pointer-events-none"></div>
-        `;
-        track.appendChild(slide);
-
-        // Barras de progresso Stories
-        const barItem = document.createElement('div');
-        barItem.className = 'h-1 flex-1 rounded-full overflow-hidden bg-white/25 transition-all';
-        barItem.innerHTML = `<div class="h-full ${idx === currentIndex ? 'bg-rose-400 w-full' : idx < currentIndex ? 'bg-white/70 w-full' : 'w-0'} transition-all duration-300"></div>`;
-        barItem.onclick = () => { currentIndex = idx; renderCarousel(); };
-        storiesBar.appendChild(barItem);
+        // Barra de progresso estilo story
+        const bar = document.createElement('div');
+        bar.className = `h-1 flex-1 rounded-full transition-all duration-300 ${index === state.currentIndex ? 'bg-pink-500 shadow-sm shadow-pink-500' : 'bg-white/30'}`;
+        storyBars.appendChild(bar);
       });
 
-      // Legenda atual
-      if (state.photos[currentIndex]) {
-        caption.textContent = state.photos[currentIndex].caption || state.title;
-      }
-
-      lucide.createIcons();
+      photoCaption.innerText = state.photos[state.currentIndex]?.caption || "VIBE TOTAL 🔥";
     }
+    renderCarousel();
 
-    function nextSlide() {
-      if (!state.photos || state.photos.length <= 1) return;
-      currentIndex = (currentIndex + 1) % state.photos.length;
+    function goToIndex(idx) {
+      if (idx < 0) idx = state.photos.length - 1;
+      if (idx >= state.photos.length) idx = 0;
+      state.currentIndex = idx;
       renderCarousel();
     }
 
-    function prevSlide() {
-      if (!state.photos || state.photos.length <= 1) return;
-      currentIndex = (currentIndex - 1 + state.photos.length) % state.photos.length;
-      renderCarousel();
-    }
+    document.getElementById('prevBtn').addEventListener('click', () => goToIndex(state.currentIndex - 1));
+    document.getElementById('nextBtn').addEventListener('click', () => goToIndex(state.currentIndex + 1));
 
-    function startAutoplay() {
-      stopAutoplay();
-      autoplayTimer = setInterval(nextSlide, 4500);
-    }
+    // Suporte a Swipe no Celular
+    let touchStartX = 0;
+    photoContainer.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+    photoContainer.addEventListener('touchend', e => {
+      const touchEndX = e.changedTouches[0].clientX;
+      if (touchStartX - touchEndX > 40) goToIndex(state.currentIndex + 1);
+      if (touchEndX - touchStartX > 40) goToIndex(state.currentIndex - 1);
+    }, { passive: true });
 
-    function stopAutoplay() {
-      if (autoplayTimer) clearInterval(autoplayTimer);
-    }
-
-    function setupTouchGestures() {
-      const carousel = document.getElementById('carouselWrapper');
-
-      carousel.addEventListener('touchstart', (e) => {
-        stopAutoplay();
-        touchStartX = e.changedTouches[0].screenX;
-        touchStartY = e.changedTouches[0].screenY;
-      }, { passive: true });
-
-      carousel.addEventListener('touchend', (e) => {
-        touchEndX = e.changedTouches[0].screenX;
-        touchEndY = e.changedTouches[0].screenY;
-        handleSwipe();
-        startAutoplay();
-      }, { passive: true });
-    }
-
-    function handleSwipe() {
-      const diffX = touchEndX - touchStartX;
-      const diffY = touchEndY - touchStartY;
-
-      // Verifica se o movimento foi predominantemente horizontal
-      if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 40) {
-        if (diffX < 0) {
-          // Deslizou para esquerda -> próximo
-          nextSlide();
-        } else {
-          // Deslizou para direita -> anterior
-          prevSlide();
-        }
-      }
-    }
-
+    // Contagem Regressiva
     function updateCountdown() {
+      const now = new Date().getTime();
       const target = new Date(state.targetDate).getTime();
-      const now = Date.now();
-      const diff = target - now;
+      const distance = target - now;
 
-      const dEl = document.getElementById('daysNum');
-      const hEl = document.getElementById('hoursNum');
-      const mEl = document.getElementById('minutesNum');
-      const sEl = document.getElementById('secondsNum');
-      const banner = document.getElementById('reachedBanner');
-
-      if (diff <= 0) {
-        dEl.textContent = '00';
-        hEl.textContent = '00';
-        mEl.textContent = '00';
-        sEl.textContent = '00';
-        banner.classList.remove('hidden');
+      if (distance <= 0) {
+        daysEl.innerText = "00";
+        hoursEl.innerText = "00";
+        minutesEl.innerText = "00";
+        secondsEl.innerText = "00";
         return;
       }
 
-      banner.classList.add('hidden');
+      const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const s = Math.floor((distance % (1000 * 60)) / 1000);
 
-      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const s = Math.floor((diff % (1000 * 60)) / 1000);
-
-      const pad = (n) => String(n).padStart(2, '0');
-
-      setDigit(dEl, pad(d));
-      setDigit(hEl, pad(h));
-      setDigit(mEl, pad(m));
-      setDigit(sEl, pad(s));
+      daysEl.innerText = String(d).padStart(2, '0');
+      hoursEl.innerText = String(h).padStart(2, '0');
+      minutesEl.innerText = String(m).padStart(2, '0');
+      secondsEl.innerText = String(s).padStart(2, '0');
     }
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
 
-    function setDigit(elem, val) {
-      if (elem.textContent !== val) {
-        elem.textContent = val;
-        elem.classList.remove('digit-pulse');
-        void elem.offsetWidth;
-        elem.classList.add('digit-pulse');
-      }
-    }
-
-    function toggleSheet(open) {
-      const overlay = document.getElementById('sheetOverlay');
-      const content = document.getElementById('sheetContent');
-
-      if (open) {
-        // Preencher formulários com estado
-        document.getElementById('cfgTitle').value = state.title;
-        document.getElementById('cfgBadge').value = state.badge;
-        document.getElementById('cfgSubtitle').value = state.subtitle;
-        document.getElementById('cfgDate').value = state.targetDate;
-        renderPhotosManager();
-
-        overlay.classList.remove('hidden');
-        setTimeout(() => {
-          content.classList.remove('translate-y-full');
-        }, 10);
-      } else {
-        content.classList.add('translate-y-full');
-        setTimeout(() => {
-          overlay.classList.add('hidden');
-        }, 300);
-      }
-    }
-
-    function renderPhotosManager() {
-      const container = document.getElementById('photosList');
-      if (!container) return;
-      container.innerHTML = '';
-
-      state.photos.forEach((item, index) => {
-        const thumb = document.createElement('div');
-        thumb.className = "relative aspect-[4/5] rounded-lg overflow-hidden bg-neutral-800 border border-neutral-700";
-        thumb.innerHTML = `
-          <img src="${item.url}" class="w-full h-full object-cover" />
-          <button onclick="removePhoto(${index})" class="absolute top-1 right-1 bg-rose-600/90 text-white rounded p-1 shadow">
-            <i data-lucide="trash-2" class="w-3 h-3"></i>
-          </button>
-        `;
-        container.appendChild(thumb);
+    // Efeito de Confetes / Hype
+    document.getElementById('hypeBtn').addEventListener('click', () => {
+      confetti({
+        particleCount: 80,
+        spread: 70,
+        origin: { y: 0.8 },
+        colors: ['#ff0055', '#00f0ff', '#facc15', '#ffffff']
       });
-      lucide.createIcons();
+      playBeep();
+    });
+
+    // Sons Sintetizados via Web Audio API (Não precisa de arquivo externo)
+    let audioCtx = null;
+    function playBeep() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.2);
+      gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.2);
     }
 
-    function handleMobileUpload(e) {
-      const files = e.target.files;
-      if (!files || files.length === 0) return;
+    // Modal de Configuração
+    const configModal = document.getElementById('configModal');
+    document.getElementById('openConfigBtn').addEventListener('click', () => {
+      document.getElementById('inputTitle').value = state.title;
+      document.getElementById('inputSubtitle').value = state.subtitle;
+      document.getElementById('inputDate').value = state.targetDate;
+      configModal.classList.remove('hidden');
+    });
 
-      Array.from(files).forEach(file => {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          state.photos.push({
-            url: event.target.result,
-            caption: file.name.replace(/\.[^/.]+$/, "")
-          });
-          renderPhotosManager();
-          renderCarousel();
-        };
-        reader.readAsDataURL(file);
-      });
-      e.target.value = '';
-    }
+    document.getElementById('closeConfigBtn').addEventListener('click', () => {
+      configModal.classList.add('hidden');
+    });
 
-    function addUrlPhoto() {
-      const input = document.getElementById('cfgPhotoUrl');
-      const url = input.value.trim();
-      if (!url) return;
+    // Salvar Configurações
+    document.getElementById('saveConfigBtn').addEventListener('click', () => {
+      state.title = document.getElementById('inputTitle').value;
+      state.subtitle = document.getElementById('inputSubtitle').value;
+      state.targetDate = document.getElementById('inputDate').value;
 
-      state.photos.push({
-        url: url,
-        caption: `Foto #${state.photos.length + 1}`
-      });
+      localStorage.setItem('trip_title', state.title);
+      localStorage.setItem('trip_subtitle', state.subtitle);
+      localStorage.setItem('trip_date', state.targetDate);
 
-      input.value = '';
-      renderPhotosManager();
-      renderCarousel();
-    }
-
-    function removePhoto(idx) {
-      state.photos.splice(idx, 1);
-      renderPhotosManager();
-      renderCarousel();
-    }
-
-    function saveSettings() {
-      state.title = document.getElementById('cfgTitle').value.trim() || DEFAULT_DATA.title;
-      state.badge = document.getElementById('cfgBadge').value.trim() || DEFAULT_DATA.badge;
-      state.subtitle = document.getElementById('cfgSubtitle').value.trim() || DEFAULT_DATA.subtitle;
-      
-      const newD = document.getElementById('cfgDate').value;
-      if (newD) state.targetDate = newD;
-
-      persistStorage();
-      updateDOM();
-      updateCountdown();
-      toggleSheet(false);
-      triggerConfetti();
-    }
-
-    function restoreDefaults() {
-      state = JSON.parse(JSON.stringify(DEFAULT_DATA));
-      persistStorage();
-      updateDOM();
-      toggleSheet(true);
-    }
-
-    function triggerConfetti() {
-      if (typeof confetti === 'function') {
-        confetti({
-          particleCount: 50,
-          spread: 60,
-          origin: { y: 0.8 },
-          colors: ['#f43f5e', '#ec4899', '#fbcfe8', '#ffffff']
+      const files = document.getElementById('inputFile').files;
+      if (files.length > 0) {
+        state.photos = [];
+        Array.from(files).forEach((file, index) => {
+          const reader = new FileReader();
+          reader.onload = e => {
+            state.photos.push({ url: e.target.result, caption: `VIBE #${index + 1}` });
+            if (state.photos.length === files.length) {
+              localStorage.setItem('trip_photos', JSON.stringify(state.photos));
+              renderCarousel();
+            }
+          };
+          reader.readAsDataURL(file);
         });
       }
-    }
 
-    // Inicialização
-    window.addEventListener('DOMContentLoaded', () => {
-      initStorage();
-      updateDOM();
-      updateCountdown();
-      setInterval(updateCountdown, 1000);
-      setupTouchGestures();
-      startAutoplay();
-      lucide.createIcons();
+      renderTitles();
+      configModal.classList.add('hidden');
     });
   </script>
-
 </body>
 </html>
