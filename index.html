@@ -31,7 +31,7 @@
       font-family: 'Bungee', cursive;
     }
 
-    /* Efeito Glitch */
+    /* Efeito Glitch no Título */
     .glitch-text {
       position: relative;
       text-shadow: 2px 2px 0px #ff0055, -2px -2px 0px #00ffff;
@@ -57,7 +57,7 @@
       box-shadow: 0 0 15px rgba(0, 240, 255, 0.4), inset 0 0 8px rgba(0, 240, 255, 0.2);
     }
 
-    /* Proporção vertical estilo telemóvel / mobile */
+    /* Proporção vertical perfeita para tela de celular */
     .mobile-photo-frame {
       aspect-ratio: 4 / 5;
       width: 100%;
@@ -75,7 +75,7 @@
 </head>
 <body class="min-h-screen noise-bg flex justify-center selection:bg-pink-600 selection:text-white">
 
-  <!-- Estrutura Principal -->
+  <!-- Container Mobile -->
   <main class="w-full max-w-md min-h-screen flex flex-col justify-between p-4 pb-12 relative z-10">
 
     <!-- Cabeçalho -->
@@ -95,18 +95,18 @@
     <section class="my-3">
       <div class="mobile-photo-frame neon-border bg-zinc-950 shadow-2xl relative select-none">
         
-        <!-- Indicadores de Story -->
+        <!-- Barrinhas de Story no Topo -->
         <div id="storyBars" class="absolute top-3 inset-x-3 z-30 flex gap-1.5 pointer-events-none"></div>
 
-        <!-- Legenda -->
-        <div class="absolute bottom-4 left-4 z-30 bg-black/80 backdrop-blur-md px-3 py-1.5 rounded-lg border border-pink-500/40">
-          <p id="photoCaption" class="text-xs font-bungee text-pink-400">🔥 VIBE DOS GUERREIROS</p>
+        <!-- Legenda da Foto -->
+        <div class="absolute bottom-4 left-4 right-4 z-30 bg-black/85 backdrop-blur-md px-3.5 py-2 rounded-xl border border-pink-500/40 text-center">
+          <p id="photoCaption" class="text-xs font-bungee text-pink-400 tracking-wide"></p>
         </div>
 
         <!-- Imagens -->
         <div id="photoContainer" class="w-full h-full relative cursor-grab active:cursor-grabbing"></div>
 
-        <!-- Navegação por setas -->
+        <!-- Setas de navegação -->
         <button id="prevBtn" class="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-black/70 border border-white/20 flex items-center justify-center text-white active:scale-90 transition">
           <i data-lucide="chevron-left" class="w-5 h-5"></i>
         </button>
@@ -116,7 +116,7 @@
       </div>
     </section>
 
-    <!-- Contagem Regressiva -->
+    <!-- Bloco da Contagem Regressiva -->
     <section class="space-y-2">
       <div class="text-center">
         <span class="text-[11px] font-bungee text-cyan-400 tracking-widest uppercase">TEMPO RESTANTE ATÉ O DESASTRE</span>
@@ -142,7 +142,7 @@
       </div>
     </section>
 
-    <!-- Botões Inferiores (Apenas Interação / Sem Edição) -->
+    <!-- Botões Inferiores -->
     <footer class="mt-4 flex items-center justify-between gap-3">
       <button id="hypeBtn" class="flex-1 py-3 px-4 rounded-xl font-bungee text-sm bg-gradient-to-r from-pink-600 to-yellow-500 text-white shadow-lg shadow-pink-500/30 active:scale-95 transition flex items-center justify-center gap-2">
         <i data-lucide="party-popper" class="w-5 h-5"></i>
@@ -159,18 +159,24 @@
   <script>
     lucide.createIcons();
 
-    // Configurações fixadas (Sem possibilidade de edição externa)
+    // ==========================================
+    // CONFIGURAÇÃO COM TODAS AS FOTOS E FRASES
+    // ==========================================
     const CONFIG = {
       targetDate: "2026-10-07T00:00:00",
       photos: [
-        { url: "D.jpeg", caption: "OS SOBREVIVENTES DA MADRUGADA 🔥" },
-        { url: "n.jpeg", caption: "SE NÃO FOR PRA DAR PT NEM VOU 🍻" },
-        { url: "j.jpeg", caption: "PREPARA O ENGOV E VAI 🚀" },
-        { url: "v.jpeg", caption: "CLÃ REUNIDO ⚡" },
+        { url: "D.jpeg", caption: "FOLGADA DEMAIS 😴" },
+        { url: "n.jpeg", caption: "NÃO FAZEM NADA TCHAU DE MÃO FECHADA 💸" },
+        { url: "j.jpeg", caption: "MANIACO DO POD 💨" },
+        { url: "v.jpeg", caption: "TACHO MINI 🤏" },
+        { url: "i.jpeg", caption: "RAINHA DO ATRASO ⏳" },
+        { url: "l.jpeg", caption: "ORFAO 🥀" },
+        { url: "k.jpeg", caption: "O EVENTO MAIS CARO QUE VÃO 💎" },
         { url: "y.jpeg", caption: "HISTÓRIAS QUE O FÍGADO NÃO CONTA 😈" },
-        { url: "i.jpeg", caption: "DIRETORIA DO CAOS 🍾" },
-        { url: "l.jpeg", caption: "SEM LIMITES 💥" },
-        { url: "k.jpeg", caption: "A MAIOR TRIP DE TODAS 🌴" }
+        { url: "WhatsApp%20Image%202026-09-28%20at%2007.48.17.jpeg", caption: "DONO DO MUNDO 🌍" },
+        { url: "WhatsApp%20Image%202026-09-28%20at%2007.48.15.jpeg", caption: "FOTO REAL! 📸" },
+        { url: "WhatsApp%20Image%202026-09-28%20at%2007.48.16.jpeg", caption: "TROPA REUNIDA 🔥" },
+        { url: "WhatsApp%20Image%202026-09-28%20at%2007.48.27.jpeg", caption: "RLK DO ODIO 💣" }
       ]
     };
 
@@ -199,7 +205,7 @@
         storyBars.appendChild(bar);
       });
 
-      photoCaption.innerText = CONFIG.photos[currentIndex]?.caption || "RLK DO ODIO 🔥";
+      photoCaption.innerText = CONFIG.photos[currentIndex]?.caption || "";
     }
     renderCarousel();
 
@@ -213,7 +219,7 @@
     document.getElementById('prevBtn').addEventListener('click', () => goToIndex(currentIndex - 1));
     document.getElementById('nextBtn').addEventListener('click', () => goToIndex(currentIndex + 1));
 
-    // Suporte a gestos touch (swipe)
+    // Suporte a swipe touch no celular
     let touchStartX = 0;
     photoContainer.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
     photoContainer.addEventListener('touchend', e => {
@@ -222,7 +228,7 @@
       if (touchEndX - touchStartX > 40) goToIndex(currentIndex - 1);
     }, { passive: true });
 
-    // Contagem Regressiva
+    // Atualização da contagem regressiva
     function updateCountdown() {
       const now = new Date().getTime();
       const target = new Date(CONFIG.targetDate).getTime();
@@ -249,7 +255,7 @@
     setInterval(updateCountdown, 1000);
     updateCountdown();
 
-    // Efeitos sonoros e confetes
+    // Efeitos sonoros sintetizados
     let audioCtx = null;
     function playBeep() {
       if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -266,6 +272,7 @@
       osc.stop(audioCtx.currentTime + 0.2);
     }
 
+    // Botão de soltar hype (confetes)
     document.getElementById('hypeBtn').addEventListener('click', () => {
       confetti({
         particleCount: 80,
